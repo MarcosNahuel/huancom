@@ -1,0 +1,9 @@
+{
+  "id": "yhyOQjPFUaMqzhs5",
+  "name": "Herramienta Productos Rev01",
+  "description": "WooCommerce product search tool with AI matching using Gemini",
+  "active": false,
+  "createdAt": "2025-08-14T23:26:30.152Z",
+  "updatedAt": "2025-10-23T22:25:28.000Z",
+  "note": "Full workflow definition truncated due to size - contains 30+ nodes for product matching"
+}

@@ -1,0 +1,51 @@
+{
+  "updatedAt": "2025-10-15T00:55:51.000Z",
+  "createdAt": "2025-07-29T16:31:05.088Z",
+  "id": "dXqR5iainR1vXuIL",
+  "name": "Memoria Redis adaptable",
+  "description": "Stores conversation context in PostgreSQL MemoriaHistorial table",
+  "active": false,
+  "nodes": [
+    {
+      "id": "67745150-d504-4e2f-b696-696bf9ad1069",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {"name": "whatsapp"},
+            {"name": "memorianueva"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "d74f9dbd-8428-4882-9a11-34875555ba53",
+      "name": "Insert rows in a table",
+      "type": "n8n-nodes-base.postgres",
+      "parameters": {
+        "schema": "public",
+        "table": "MemoriaHistorial",
+        "columns": {
+          "whatsapp": "={{ $json.whatsapp }}",
+          "mensaje": "={{ $json.memorianueva }}",
+          "fecha": "={{ $now }}"
+        }
+      }
+    },
+    {
+      "id": "520faa46-eac6-433a-81a2-d6ab06595dd6",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "parameters": {
+        "assignments": [
+          {"name": "Hecho", "value": "Listo", "type": "string"}
+        ]
+      }
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {"main": [[{"node": "Insert rows in a table"}]]},
+    "Insert rows in a table": {"main": [[{"node": "Edit Fields"}]]}
+  }
+}

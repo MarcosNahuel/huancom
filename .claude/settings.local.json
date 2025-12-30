@@ -1,0 +1,9 @@
+{
+  "enabledMcpjsonServers": [
+    "github",
+    "vercel",
+    "chrome-devtools",
+    "context7",
+    "n8n"
+  ]
+}

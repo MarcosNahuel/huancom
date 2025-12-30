@@ -1,0 +1,50 @@
+{
+  "updatedAt": "2025-09-19T10:37:11.000Z",
+  "createdAt": "2025-08-20T23:08:32.113Z",
+  "id": "bcdFkWEeHp1Yf4Kj",
+  "name": "Herramienta base de datos Tecnica",
+  "description": "Technical knowledge base from Google Docs using Gemini",
+  "active": false,
+  "nodes": [
+    {
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "parameters": {
+        "workflowInputs": {"values": [{"name": "pregunta"}]}
+      }
+    },
+    {
+      "id": "2da9eee0-1c08-4f72-ba1d-38f6b30d43e8",
+      "name": "Get a document",
+      "type": "n8n-nodes-base.googleDocs",
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "get",
+        "documentURL": "https://docs.google.com/document/d/1LqvrifEl7p58Usroj5U9LHkhpJRlKSrMxAxenGV6BKM/edit"
+      }
+    },
+    {
+      "id": "d8f6774c-b928-42a6-aa00-bdb8c16b0306",
+      "name": "Message a model",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "parameters": {
+        "modelId": "models/gemini-2.5-flash",
+        "systemMessage": "Eres una IA experta en resolver preguntas tecnicas usando la base de datos"
+      }
+    },
+    {
+      "id": "492ca8b7-636f-4991-a65e-7831171c7721",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "parameters": {
+        "assignments": [{"name": "IA", "value": "={{ $json.content.parts[0].text }}"}]
+      }
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {"main": [[{"node": "Get a document"}]]},
+    "Get a document": {"main": [[{"node": "Message a model"}]]},
+    "Message a model": {"main": [[{"node": "Edit Fields"}]]}
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "updatedAt": "2025-08-14T23:22:29.000Z",
+  "createdAt": "2025-07-29T16:28:26.028Z",
+  "id": "6RJxDx9el6g7lgRm",
+  "name": "Herramienta Mejora WhatsApp",
+  "description": "Logs unresolved queries to Baserow database",
+  "active": false,
+  "nodes": [
+    {
+      "id": "3bdb1aa6-dbfc-4182-bc9a-2ba57269ea12",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "parameters": {
+        "workflowInputs": {
+          "values": [{"name": "Mensaje"}]
+        }
+      }
+    },
+    {
+      "id": "417a7ccf-c170-44b9-af58-8cd2e77ae1bd",
+      "name": "Create a row",
+      "type": "n8n-nodes-base.baserow",
+      "parameters": {
+        "operation": "create",
+        "databaseId": 132,
+        "tableId": 616,
+        "fieldsUi": {
+          "fieldValues": [
+            {"fieldId": 5894, "fieldValue": "={{ $json.Mensaje }}"}
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {"main": [[{"node": "Create a row"}]]}
+  }
+}

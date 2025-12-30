@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Large execution logs (exceed GitHub limit)
+**/executions.json
+**/workflow_principal_executions*.json
+
+# Token files (contains sensitive credentials)
+token.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+nul

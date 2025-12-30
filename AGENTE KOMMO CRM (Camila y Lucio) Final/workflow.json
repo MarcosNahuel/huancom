@@ -1,0 +1,322 @@
+{
+  "updatedAt": "2025-12-11T18:33:47.000Z",
+  "createdAt": "2025-06-29T11:28:28.883Z",
+  "id": "slIWaAf2mVITzuTZ",
+  "name": "AGENTE KOMMO CRM (Camila y Lucio) Final",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "conversacionkommohuangcom",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1024, -432],
+      "id": "58dfcfee-3c55-439e-a605-9c2d796e6cfc",
+      "name": "Webhook",
+      "webhookId": "0bf48164-a1db-4a55-b402-299f3a308401"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58f95e0e-01f0-4626-ad9e-135b799e7627",
+              "name": "audio",
+              "value": "={{ $('Webhook').item.json.body['message[add][0][attachment][link]'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [464, -160],
+      "id": "e4bab077-a005-4d1c-acd9-44f30b99d2f5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body[\"message[add][0][attachment][type]\"] }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4629d7d0-03a7-4641-bc21-c8d598fdbc2f"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ac7e6e2f-b656-4682-94b6-76fe37260d18",
+                    "leftValue": "={{ $('Webhook').item.json.body[\"message[add][0][text]\"] }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4e9ceec4-9a43-457b-8cf4-6a344d5588d1",
+                    "leftValue": "={{ $('Webhook').item.json.body[\"message[add][0][attachment][type]\"] }}",
+                    "rightValue": "picture",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "imagen"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [240, 48],
+      "id": "7850732f-dd8a-4962-9000-0e9654198289",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "db4a6eeb-b1f1-44a0-9507-5a35f6227996",
+              "name": "text",
+              "value": "={{ $('Webhook').item.json.body[\"message[add][0][text]\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [912, 48],
+      "id": "d0e26b24-833e-462a-a033-dcaf38e646c3",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "db4a6eeb-b1f1-44a0-9507-5a35f6227996",
+              "name": "imagen",
+              "value": "={{ $('Webhook').item.json.body['message[add][0][attachment][link]'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [464, 240],
+      "id": "039ec579-6c23-4215-a6cf-09b033753016",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Webhook').item.json.body['message[add][0][contact_id]'] }}",
+        "messageData": "={{ $json.text }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [1120, 48],
+      "id": "62e37c77-391b-4fa0-a293-5503f17b3f27",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "giArcfMTqHf9E9Ig",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1344, 48],
+      "id": "9abe3254-5fb6-457d-849f-4c2e475ea004",
+      "name": "Wait",
+      "webhookId": "b6fa54dc-b1c2-46cd-8b4b-62ec11d8cc71"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "mensajes",
+        "key": "={{ $('Webhook').item.json.body['message[add][0][contact_id]'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [1568, 48],
+      "id": "7e32cfc9-e4b4-450a-8ae7-7816e3eb29f2",
+      "name": "Redis1",
+      "credentials": {
+        "redis": {
+          "id": "giArcfMTqHf9E9Ig",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "Haz una descripcipon lo más detallada posible de la imágen que recibes",
+        "imageUrls": "={{ $json.imagen }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [688, 240],
+      "id": "55ea8d0e-dd8e-4ca3-b54d-df0f60737d0b",
+      "name": "Analyze image",
+      "credentials": {
+        "openAiApi": {
+          "id": "jIvZ6OTAYK7R3YqI",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('Webhook').item.json.body['message[add][0][contact_id]'] }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [4592, 48],
+      "id": "873bb525-cabc-4cf4-915b-876657085978",
+      "name": "Redis2",
+      "credentials": {
+        "redis": {
+          "id": "giArcfMTqHf9E9Ig",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [912, -160],
+      "id": "f3b2fb6b-125f-4b3a-a798-21d16295cfb0",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "jIvZ6OTAYK7R3YqI",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fae6a726-13be-4e5d-84ec-28b61287d036",
+              "leftValue": "={{ $('Redis1').item.json.mensajes[0] }}",
+              "rightValue": "={{ $('Redis').item.json.text }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1792, 48],
+      "id": "da121bd7-de14-4062-bc90-131e29b8cbd1",
+      "name": "If"
+    }
+  ],
+  "connections": {},
+  "settings": {},
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "slIWaAf2mVITzuTZ",
+  "triggerCount": 1,
+  "tags": []
+}

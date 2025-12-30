@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<tu-token-github>"
+      }
+    },
+    "vercel": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@vercel/mcp"],
+      "env": {
+        "VERCEL_API_TOKEN": "<tu-token-vercel>"
+      }
+    },
+    "chrome-devtools": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "chrome-devtools-mcp@latest"]
+    },
+    "context7": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@upstash/context7-mcp"]
+    },
+    "n8n": {
+      "command": "node",
+      "args": [
+        "D:/OneDrive/GitHub/SYNC/node_modules/@illuminaresolutions/n8n-mcp-server/build/index.js"
+      ],
+      "env": {
+        "N8N_HOST": "https://n8n.huangcom.com",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNDk3YjVlZS04ZTc1LTQwMjgtYjBiZi0yMmFjZjNhOTA0MWQiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzY3MDI0ODE0fQ.EvNrRoG4q4uO4EWmnVYaTwz2BrE1-VH5bnUvP_cNuEs"
+      }
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "implementationDate": "2025-10",
+  "monthlyOrders": [
+    {
+      "month": "2024-12",
+      "orders": 99,
+      "revenue": 39132776.6,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-01",
+      "orders": 122,
+      "revenue": 45387518.99999997,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-02",
+      "orders": 98,
+      "revenue": 29050874.90999999,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-03",
+      "orders": 90,
+      "revenue": 34171412.230000004,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-04",
+      "orders": 89,
+      "revenue": 40576017.6,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-05",
+      "orders": 94,
+      "revenue": 39083443.33,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-06",
+      "orders": 82,
+      "revenue": 29943059.839999996,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-07",
+      "orders": 64,
+      "revenue": 22175873.95,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-08",
+      "orders": 67,
+      "revenue": 27809081.99999999,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-09",
+      "orders": 48,
+      "revenue": 17126077.360000003,
+      "isAfterImplementation": false
+    },
+    {
+      "month": "2025-10",
+      "orders": 71,
+      "revenue": 27799013.410000008,
+      "isAfterImplementation": true
+    },
+    {
+      "month": "2025-11",
+      "orders": 73,
+      "revenue": 26453665.930000003,
+      "isAfterImplementation": true
+    },
+    {
+      "month": "2025-12",
+      "orders": 23,
+      "revenue": 12582469.74,
+      "isAfterImplementation": true
+    }
+  ],
+  "trendBefore": {
+    "slope": -6.260606060606061,
+    "intercept": 85.3
+  },
+  "trendAfter": {
+    "slope": -24,
+    "intercept": 55.666666666666664
+  },
+  "projectedWithoutImpl": [
+    {
+      "month": "2025-10",
+      "projected": 41.73939393939394
+    },
+    {
+      "month": "2025-11",
+      "projected": 35.47878787878788
+    },
+    {
+      "month": "2025-12",
+      "projected": 29.21818181818182
+    }
+  ],
+  "impact": {
+    "avgOrdersBefore": 85.3,
+    "avgOrdersAfter": 55.666666666666664,
+    "avgRevenueBefore": 32445613.682,
+    "avgRevenueAfter": 22278383.02666667,
+    "incrementalOrders": 60.56363636363636,
+    "incrementalRevenue": 24238201.587967344,
+    "orderChangePercent": -34.74013286440016,
+    "revenueChangePercent": -31.336225460188626,
+    "trendReversal": false
+  }
+}
