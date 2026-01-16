@@ -1,11 +1,11 @@
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { Header } from '@/components/dashboard/header'
 import { KPICard } from '@/components/dashboard/kpi-card'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { formatCurrency, formatNumber } from '@/lib/utils'
 
 async function getProveedoresData() {
-  const supabase = createServerClient()
+  const supabase = await createClient()
 
   // Obtener proveedores únicos de asientos
   const { data: proveedores } = await supabase
