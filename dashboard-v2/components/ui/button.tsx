@@ -16,8 +16,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'disabled:pointer-events-none disabled:opacity-50',
           {
             'bg-brand-600 text-white hover:bg-brand-700': variant === 'default',
-            'border border-gray-300 bg-white hover:bg-gray-50': variant === 'outline',
-            'hover:bg-gray-100': variant === 'ghost',
+            'border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-slate-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-zinc-700': variant === 'outline',
+            'hover:bg-gray-100 dark:hover:bg-zinc-700 text-slate-700 dark:text-slate-200': variant === 'ghost',
             'bg-red-600 text-white hover:bg-red-700': variant === 'destructive',
           },
           {
