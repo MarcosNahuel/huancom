@@ -48,10 +48,10 @@ async function getCostosFijosData() {
     totalMensualUSD,
     totalAnualARS: totalMensualARS * 12,
     porCentroCosto: Object.entries(porCentroCosto)
-      .map(([nombre, data]) => ({ nombre, ...data }))
+      .map(([nombre, data]) => ({ nombre, total: data.total, cantidad: data.cantidad }))
       .sort((a, b) => b.total - a.total),
     porTipo: Object.entries(porTipo)
-      .map(([nombre, data]) => ({ nombre, ...data }))
+      .map(([nombre, data]) => ({ nombre, total: data.total, cantidad: data.cantidad }))
       .sort((a, b) => b.total - a.total),
   }
 }
