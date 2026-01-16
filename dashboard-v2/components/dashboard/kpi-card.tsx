@@ -28,13 +28,13 @@ const iconMap: Record<string, LucideIcon> = {
   Battery,
 }
 
-// Variantes de color para los iconos
+// Variantes de color para los iconos - Solar Luxury Dark
 const iconVariants = {
-  default: 'bg-gradient-to-br from-amber-100 to-orange-50 dark:from-amber-900/40 dark:to-orange-900/30 text-amber-600 dark:text-amber-400',
-  success: 'bg-gradient-to-br from-emerald-100 to-green-50 dark:from-emerald-900/40 dark:to-green-900/30 text-emerald-600 dark:text-emerald-400',
-  danger: 'bg-gradient-to-br from-red-100 to-rose-50 dark:from-red-900/40 dark:to-rose-900/30 text-red-500 dark:text-red-400',
-  energy: 'bg-gradient-to-br from-sky-100 to-blue-50 dark:from-sky-900/40 dark:to-blue-900/30 text-sky-600 dark:text-sky-400',
-  warning: 'bg-gradient-to-br from-amber-100 to-yellow-50 dark:from-amber-900/40 dark:to-yellow-900/30 text-amber-500 dark:text-amber-400',
+  default: 'bg-gradient-to-br from-amber-100 to-orange-50 dark:from-amber-500/20 dark:to-orange-500/10 text-amber-600 dark:text-amber-400 dark:shadow-[0_0_20px_-5px_rgba(249,168,37,0.3)]',
+  success: 'bg-gradient-to-br from-emerald-100 to-green-50 dark:from-emerald-500/20 dark:to-emerald-500/10 text-emerald-600 dark:text-emerald-400 dark:shadow-[0_0_20px_-5px_rgba(52,211,153,0.3)]',
+  danger: 'bg-gradient-to-br from-red-100 to-rose-50 dark:from-rose-500/20 dark:to-rose-500/10 text-red-500 dark:text-rose-400 dark:shadow-[0_0_20px_-5px_rgba(251,113,133,0.3)]',
+  energy: 'bg-gradient-to-br from-sky-100 to-blue-50 dark:from-sky-500/20 dark:to-sky-500/10 text-sky-600 dark:text-sky-400 dark:shadow-[0_0_20px_-5px_rgba(56,189,248,0.3)]',
+  warning: 'bg-gradient-to-br from-amber-100 to-yellow-50 dark:from-yellow-500/20 dark:to-yellow-500/10 text-amber-500 dark:text-yellow-400 dark:shadow-[0_0_20px_-5px_rgba(251,191,36,0.3)]',
 }
 
 interface KPICardProps {
@@ -66,12 +66,22 @@ export function KPICard({
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800/50 p-5',
+        'group relative overflow-hidden rounded-xl p-5',
+        // Light mode
+        'border border-slate-200/80 bg-white',
         'shadow-[0_1px_3px_0_rgb(0_0_0/0.04),0_1px_2px_-1px_rgb(0_0_0/0.04)]',
-        'dark:shadow-[0_1px_3px_0_rgb(0_0_0/0.3),0_0_0_1px_rgb(255_255_255/0.03)]',
+        // Dark mode - glassmorphism effect
+        'dark:border-white/[0.06] dark:bg-gradient-to-br dark:from-slate-800/60 dark:to-slate-900/80',
+        'dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.03)]',
+        'dark:backdrop-blur-sm',
+        // Transitions
         'transition-all duration-300 ease-out',
-        'hover:shadow-[0_10px_40px_-10px_rgb(0_0_0/0.1)] dark:hover:shadow-[0_10px_40px_-10px_rgb(0_0_0/0.5)]',
-        'hover:border-slate-300/80 dark:hover:border-amber-600/50 hover:-translate-y-0.5',
+        // Light hover
+        'hover:shadow-[0_10px_40px_-10px_rgb(0_0_0/0.1)] hover:border-slate-300/80',
+        // Dark hover - solar glow effect
+        'dark:hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.6),0_0_30px_-10px_rgba(249,168,37,0.15),inset_0_1px_0_0_rgba(255,255,255,0.05)]',
+        'dark:hover:border-amber-500/20',
+        'hover:-translate-y-0.5',
         'animate-fade-in opacity-0',
         className
       )}
@@ -82,6 +92,7 @@ export function KPICard({
         className={cn(
           'absolute inset-x-0 top-0 h-0.5',
           'bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600',
+          'dark:from-amber-500 dark:via-amber-400 dark:to-orange-400',
           'opacity-0 transition-opacity duration-300',
           'group-hover:opacity-100'
         )}
@@ -91,7 +102,8 @@ export function KPICard({
       <div
         className={cn(
           'absolute -top-24 -right-24 h-48 w-48 rounded-full',
-          'bg-gradient-to-br from-amber-200/30 to-orange-100/20 dark:from-amber-500/10 dark:to-orange-500/5',
+          'bg-gradient-to-br from-amber-200/30 to-orange-100/20',
+          'dark:from-amber-500/15 dark:to-orange-500/10',
           'opacity-0 blur-3xl transition-opacity duration-500',
           'group-hover:opacity-100'
         )}
@@ -122,8 +134,12 @@ export function KPICard({
                   'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold',
                   'transition-transform duration-200 hover:scale-105',
                   trend.isPositive
-                    ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-100 dark:ring-emerald-800'
-                    : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 ring-1 ring-red-100 dark:ring-red-800'
+                    ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100'
+                    : 'bg-red-50 text-red-700 ring-1 ring-red-100',
+                  // Dark mode with subtle glow
+                  trend.isPositive
+                    ? 'dark:bg-emerald-500/15 dark:text-emerald-400 dark:ring-emerald-500/30 dark:shadow-[0_0_10px_-3px_rgba(52,211,153,0.25)]'
+                    : 'dark:bg-rose-500/15 dark:text-rose-400 dark:ring-rose-500/30 dark:shadow-[0_0_10px_-3px_rgba(251,113,133,0.25)]'
                 )}
               >
                 {trend.isPositive ? (

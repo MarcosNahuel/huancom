@@ -87,24 +87,24 @@ export default async function ProveedoresPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-medium">#</th>
-                  <th className="text-left py-3 px-4 font-medium">Proveedor</th>
-                  <th className="text-left py-3 px-4 font-medium">CUIT</th>
-                  <th className="text-right py-3 px-4 font-medium">Total Compras</th>
-                  <th className="text-right py-3 px-4 font-medium">Operaciones</th>
-                  <th className="text-right py-3 px-4 font-medium">Promedio</th>
+                <tr className="border-b border-slate-200 dark:border-slate-700/50">
+                  <th className="text-left py-3 px-4 font-medium text-slate-600 dark:text-slate-300">#</th>
+                  <th className="text-left py-3 px-4 font-medium text-slate-600 dark:text-slate-300">Proveedor</th>
+                  <th className="text-left py-3 px-4 font-medium text-slate-600 dark:text-slate-300">CUIT</th>
+                  <th className="text-right py-3 px-4 font-medium text-slate-600 dark:text-slate-300">Total Compras</th>
+                  <th className="text-right py-3 px-4 font-medium text-slate-600 dark:text-slate-300">Operaciones</th>
+                  <th className="text-right py-3 px-4 font-medium text-slate-600 dark:text-slate-300">Promedio</th>
                 </tr>
               </thead>
               <tbody>
                 {data.proveedores.slice(0, 50).map((proveedor, index) => (
-                  <tr key={proveedor.nombre} className="border-b hover:bg-muted/50">
-                    <td className="py-3 px-4 text-muted-foreground">{index + 1}</td>
-                    <td className="py-3 px-4 font-medium">{proveedor.nombre}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{proveedor.cuit || '-'}</td>
-                    <td className="py-3 px-4 text-right">{formatCurrency(proveedor.totalCompras)}</td>
-                    <td className="py-3 px-4 text-right">{formatNumber(proveedor.cantidadOperaciones)}</td>
-                    <td className="py-3 px-4 text-right">
+                  <tr key={proveedor.nombre} className="border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-3 px-4 text-slate-500 dark:text-slate-400">{index + 1}</td>
+                    <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">{proveedor.nombre}</td>
+                    <td className="py-3 px-4 text-slate-500 dark:text-slate-400">{proveedor.cuit || '-'}</td>
+                    <td className="py-3 px-4 text-right text-slate-900 dark:text-emerald-400 font-medium">{formatCurrency(proveedor.totalCompras)}</td>
+                    <td className="py-3 px-4 text-right text-slate-700 dark:text-slate-300">{formatNumber(proveedor.cantidadOperaciones)}</td>
+                    <td className="py-3 px-4 text-right text-slate-700 dark:text-amber-400">
                       {formatCurrency(proveedor.totalCompras / proveedor.cantidadOperaciones)}
                     </td>
                   </tr>
