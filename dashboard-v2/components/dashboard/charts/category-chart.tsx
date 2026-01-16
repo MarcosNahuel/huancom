@@ -100,6 +100,7 @@ export function CategoryChart({ data }: CategoryChartProps) {
           innerRadius={40}
           fill="#8884d8"
           dataKey="ingresos"
+          nameKey="categoria"
           paddingAngle={2}
         >
           {chartData.map((entry, index) => (
