@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { ThemeToggle } from '@/components/theme-toggle'
 import {
   RefreshCw,
   Download,
@@ -105,24 +106,24 @@ export function Header({
   }
 
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200/80 bg-white/95 backdrop-blur-sm px-6 py-4">
+    <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/80 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-6 py-4">
       <div className="min-w-0 flex-1">
         {/* Title */}
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-display">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display">
           {title}
         </h1>
 
         {/* Description & Source */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
           {description && (
-            <p className="text-sm text-slate-500">{description}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">{description}</p>
           )}
           {sourceUrl && (
             <a
               href={sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors group"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors group"
             >
               <ExternalLink className="h-3 w-3 transition-transform group-hover:scale-110" />
               <span className="group-hover:underline">
@@ -137,6 +138,9 @@ export function Header({
       <div className="flex items-center gap-3 ml-4">
         {actions}
 
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Export Button */}
         {exportTipo && (
           <div className="relative">
@@ -145,10 +149,10 @@ export function Header({
               disabled={exporting}
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium',
-                'bg-white border border-slate-200 text-slate-700',
-                'hover:bg-slate-50 hover:border-slate-300',
+                'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200',
+                'hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600',
                 'transition-all duration-200',
-                'focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-300',
+                'focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-300 dark:focus:border-amber-600',
                 'disabled:opacity-50 disabled:cursor-not-allowed'
               )}
             >
@@ -171,20 +175,20 @@ export function Header({
                   onClick={() => setShowExportMenu(false)}
                 />
                 {/* Menu */}
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg shadow-slate-200/50 z-20 overflow-hidden animate-fade-in">
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg shadow-slate-200/50 dark:shadow-black/50 z-20 overflow-hidden animate-fade-in">
                   <div className="py-1">
                     <button
-                      className="flex items-center w-full px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                      className="flex items-center w-full px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                       onClick={() => handleExport('excel')}
                     >
-                      <FileSpreadsheet className="w-4 h-4 mr-3 text-emerald-600" />
+                      <FileSpreadsheet className="w-4 h-4 mr-3 text-emerald-600 dark:text-emerald-400" />
                       <span className="font-medium">Exportar Excel</span>
                     </button>
                     <button
-                      className="flex items-center w-full px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                      className="flex items-center w-full px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                       onClick={() => handleExport('csv')}
                     >
-                      <FileText className="w-4 h-4 mr-3 text-sky-600" />
+                      <FileText className="w-4 h-4 mr-3 text-sky-600 dark:text-sky-400" />
                       <span className="font-medium">Exportar CSV</span>
                     </button>
                   </div>

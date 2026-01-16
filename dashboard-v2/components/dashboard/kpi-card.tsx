@@ -30,11 +30,11 @@ const iconMap: Record<string, LucideIcon> = {
 
 // Variantes de color para los iconos
 const iconVariants = {
-  default: 'bg-gradient-to-br from-amber-100 to-orange-50 text-amber-600',
-  success: 'bg-gradient-to-br from-emerald-100 to-green-50 text-emerald-600',
-  danger: 'bg-gradient-to-br from-red-100 to-rose-50 text-red-500',
-  energy: 'bg-gradient-to-br from-sky-100 to-blue-50 text-sky-600',
-  warning: 'bg-gradient-to-br from-amber-100 to-yellow-50 text-amber-500',
+  default: 'bg-gradient-to-br from-amber-100 to-orange-50 dark:from-amber-900/40 dark:to-orange-900/30 text-amber-600 dark:text-amber-400',
+  success: 'bg-gradient-to-br from-emerald-100 to-green-50 dark:from-emerald-900/40 dark:to-green-900/30 text-emerald-600 dark:text-emerald-400',
+  danger: 'bg-gradient-to-br from-red-100 to-rose-50 dark:from-red-900/40 dark:to-rose-900/30 text-red-500 dark:text-red-400',
+  energy: 'bg-gradient-to-br from-sky-100 to-blue-50 dark:from-sky-900/40 dark:to-blue-900/30 text-sky-600 dark:text-sky-400',
+  warning: 'bg-gradient-to-br from-amber-100 to-yellow-50 dark:from-amber-900/40 dark:to-yellow-900/30 text-amber-500 dark:text-amber-400',
 }
 
 interface KPICardProps {
@@ -66,11 +66,12 @@ export function KPICard({
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-5',
+        'group relative overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800/50 p-5',
         'shadow-[0_1px_3px_0_rgb(0_0_0/0.04),0_1px_2px_-1px_rgb(0_0_0/0.04)]',
+        'dark:shadow-[0_1px_3px_0_rgb(0_0_0/0.3),0_0_0_1px_rgb(255_255_255/0.03)]',
         'transition-all duration-300 ease-out',
-        'hover:shadow-[0_10px_40px_-10px_rgb(0_0_0/0.1)]',
-        'hover:border-slate-300/80 hover:-translate-y-0.5',
+        'hover:shadow-[0_10px_40px_-10px_rgb(0_0_0/0.1)] dark:hover:shadow-[0_10px_40px_-10px_rgb(0_0_0/0.5)]',
+        'hover:border-slate-300/80 dark:hover:border-amber-600/50 hover:-translate-y-0.5',
         'animate-fade-in opacity-0',
         className
       )}
@@ -90,7 +91,7 @@ export function KPICard({
       <div
         className={cn(
           'absolute -top-24 -right-24 h-48 w-48 rounded-full',
-          'bg-gradient-to-br from-amber-200/30 to-orange-100/20',
+          'bg-gradient-to-br from-amber-200/30 to-orange-100/20 dark:from-amber-500/10 dark:to-orange-500/5',
           'opacity-0 blur-3xl transition-opacity duration-500',
           'group-hover:opacity-100'
         )}
@@ -99,19 +100,19 @@ export function KPICard({
       <div className="relative flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0 space-y-3">
           {/* Título */}
-          <p className="text-sm font-medium text-slate-500 tracking-tight">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 tracking-tight">
             {title}
           </p>
 
           {/* Valor principal */}
-          <p className="font-display text-[1.75rem] font-bold tracking-tight text-slate-900 leading-none tabular-nums">
+          <p className="font-display text-[1.75rem] font-bold tracking-tight text-slate-900 dark:text-slate-100 leading-none tabular-nums">
             {value}
           </p>
 
           {/* Descripción y trend */}
           <div className="flex flex-wrap items-center gap-2">
             {description && (
-              <p className="text-xs text-slate-400 font-medium">
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
                 {description}
               </p>
             )}
@@ -121,8 +122,8 @@ export function KPICard({
                   'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold',
                   'transition-transform duration-200 hover:scale-105',
                   trend.isPositive
-                    ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100'
-                    : 'bg-red-50 text-red-700 ring-1 ring-red-100'
+                    ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-100 dark:ring-emerald-800'
+                    : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 ring-1 ring-red-100 dark:ring-red-800'
                 )}
               >
                 {trend.isPositive ? (
@@ -169,9 +170,9 @@ export function KPICardCompact({
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-lg border border-slate-200/60 bg-white p-4',
-        'shadow-sm transition-all duration-200',
-        'hover:shadow-md hover:border-slate-300/80 hover:-translate-y-px',
+        'group relative overflow-hidden rounded-lg border border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 p-4',
+        'shadow-sm dark:shadow-[0_1px_3px_0_rgb(0_0_0/0.3)] transition-all duration-200',
+        'hover:shadow-md dark:hover:shadow-[0_4px_12px_-2px_rgb(0_0_0/0.4)] hover:border-slate-300/80 dark:hover:border-amber-600/40 hover:-translate-y-px',
         className
       )}
     >
@@ -188,16 +189,16 @@ export function KPICardCompact({
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-slate-500 font-medium truncate">{title}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate">{title}</p>
           <div className="flex items-baseline gap-2">
-            <p className="font-display text-lg font-bold text-slate-900 tabular-nums">
+            <p className="font-display text-lg font-bold text-slate-900 dark:text-slate-100 tabular-nums">
               {value}
             </p>
             {trend && (
               <span
                 className={cn(
                   'text-xs font-semibold',
-                  trend.isPositive ? 'text-emerald-600' : 'text-red-600'
+                  trend.isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
                 )}
               >
                 {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
