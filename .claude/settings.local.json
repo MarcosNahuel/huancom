@@ -1,9 +1,46 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__google-workspace__search_gmail_messages",
+      "mcp__google-workspace__get_gmail_messages_content_batch",
+      "mcp__google-workspace__list_gmail_labels",
+      "mcp__google-workspace__search_drive_files",
+      "mcp__google-workspace__get_drive_file_content",
+      "mcp__google-workspace__list_calendar_events",
+      "mcp__github__create_pull_request",
+      "mcp__github__push_files",
+      "mcp__github__get_file_contents",
+      "mcp__github__search_repositories",
+      "mcp__github__create_issue",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__apply_migration",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__list_projects",
+      "mcp__vercel__*",
+      "mcp__context7__*",
+      "mcp__claude-in-chrome__*",
+      "mcp__next-devtools__*",
+      "mcp__n8n__*",
+      "mcp__n8n-mcp__*",
+      "mcp__mercadolibre__*",
+      "Bash(curl:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(git:*)",
+      "WebSearch",
+      "WebFetch"
+    ],
+    "deny": []
+  },
   "enabledMcpjsonServers": [
-    "github",
+    "google-workspace",
     "vercel",
-    "chrome-devtools",
     "context7",
-    "n8n"
-  ]
+    "claude-in-chrome",
+    "next-devtools",
+    "n8n",
+    "mercadolibre"
+  ],
+  "enableAllProjectMcpServers": true
 }

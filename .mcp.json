@@ -1,36 +1,41 @@
 {
   "mcpServers": {
-    "github": {
+    "google-workspace": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<tu-token-github>"
-      }
+      "args": ["/c", "npx", "-y", "@presto-ai/google-workspace-mcp"]
     },
     "vercel": {
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@vercel/mcp"],
-      "env": {
-        "VERCEL_API_TOKEN": "<tu-token-vercel>"
-      }
-    },
-    "chrome-devtools": {
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "chrome-devtools-mcp@latest"]
+      "type": "http",
+      "url": "https://mcp.vercel.com"
     },
     "context7": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@upstash/context7-mcp"]
+      "args": ["/c", "npx", "-y", "@upstash/context7-mcp@latest"]
+    },
+    "claude-in-chrome": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@anthropic/claude-in-chrome-mcp"]
+    },
+    "next-devtools": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "next-devtools-mcp@latest"]
     },
     "n8n": {
-      "command": "node",
+      "command": "cmd",
       "args": [
-        "D:/OneDrive/GitHub/SYNC/node_modules/@illuminaresolutions/n8n-mcp-server/build/index.js"
-      ],
-      "env": {
-        "N8N_HOST": "https://n8n.huangcom.com",
-        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNDk3YjVlZS04ZTc1LTQwMjgtYjBiZi0yMmFjZjNhOTA0MWQiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzY3MDI0ODE0fQ.EvNrRoG4q4uO4EWmnVYaTwz2BrE1-VH5bnUvP_cNuEs"
-      }
+        "/c",
+        "npx",
+        "-y",
+        "supergateway",
+        "--streamableHttp",
+        "https://juan-n8n.zfis90.easypanel.host/mcp-server/http",
+        "--header",
+        "authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNDk3YjVlZS04ZTc1LTQwMjgtYjBiZi0yMmFjZjNhOTA0MWQiLCJpc3MiOiJuOG4iLCJhdWQiOiJtY3Atc2VydmVyLWFwaSIsImp0aSI6ImM3Mzc3Mjc0LWE3ZjctNDhjOS04Mzc3LWNmMDM2NGE4MDNmZCIsImlhdCI6MTc2ODU2MjQ5Nn0.99ib31nMmHjVw1zR25y6XjQWnMWR48Q-huhBA-20Q3U"
+      ]
+    },
+    "mercadolibre": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "mcp-remote", "https://mcp.mercadolibre.com/mcp", "--header", "Authorization:Bearer APP_USR-3004336950612441-121817-c48717a0d43eee5e89319d8da896360b-2303729344"]
     }
   }
 }
