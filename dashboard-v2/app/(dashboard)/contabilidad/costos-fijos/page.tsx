@@ -18,27 +18,41 @@ async function getCostosFijosData() {
   const totalMensualARS = activos.reduce((sum, c) => sum + (c.costo_mensual_ars || 0), 0)
   const totalMensualUSD = activos.reduce((sum, c) => sum + (c.costo_mensual_usd || 0), 0)
 
+  type GroupData = { total: number; cantidad: number }
+
   // Agrupar por centro de costo
-  const porCentroCosto = activos.reduce((acc, c) => {
+  const porCentroCosto: Record<string, GroupData> = {}
+  for (const c of activos) {
     const centro = c.centro_costo || 'Sin clasificar'
-    if (!acc[centro]) {
-      acc[centro] = { total: 0, cantidad: 0 }
+    if (!porCentroCosto[centro]) {
+      porCentroCosto[centro] = { total: 0, cantidad: 0 }
     }
-    acc[centro].total += c.costo_mensual_ars || 0
-    acc[centro].cantidad++
-    return acc
-  }, {} as Record<string, { total: number; cantidad: number }>)
+    porCentroCosto[centro].total += c.costo_mensual_ars || 0
+    porCentroCosto[centro].cantidad++
+  }
 
   // Agrupar por tipo
-  const porTipo = activos.reduce((acc, c) => {
+  const porTipo: Record<string, GroupData> = {}
+  for (const c of activos) {
     const tipo = c.tipo || 'Sin tipo'
-    if (!acc[tipo]) {
-      acc[tipo] = { total: 0, cantidad: 0 }
+    if (!porTipo[tipo]) {
+      porTipo[tipo] = { total: 0, cantidad: 0 }
     }
-    acc[tipo].total += c.costo_mensual_ars || 0
-    acc[tipo].cantidad++
-    return acc
-  }, {} as Record<string, { total: number; cantidad: number }>)
+    porTipo[tipo].total += c.costo_mensual_ars || 0
+    porTipo[tipo].cantidad++
+  }
+
+  const centrosArray = Object.keys(porCentroCosto).map(nombre => ({
+    nombre,
+    total: porCentroCosto[nombre].total,
+    cantidad: porCentroCosto[nombre].cantidad,
+  })).sort((a, b) => b.total - a.total)
+
+  const tiposArray = Object.keys(porTipo).map(nombre => ({
+    nombre,
+    total: porTipo[nombre].total,
+    cantidad: porTipo[nombre].cantidad,
+  })).sort((a, b) => b.total - a.total)
 
   return {
     costos: costos || [],
@@ -47,12 +61,8 @@ async function getCostosFijosData() {
     totalMensualARS,
     totalMensualUSD,
     totalAnualARS: totalMensualARS * 12,
-    porCentroCosto: Object.entries(porCentroCosto)
-      .map(([nombre, data]) => ({ nombre, total: data.total, cantidad: data.cantidad }))
-      .sort((a, b) => b.total - a.total),
-    porTipo: Object.entries(porTipo)
-      .map(([nombre, data]) => ({ nombre, total: data.total, cantidad: data.cantidad }))
-      .sort((a, b) => b.total - a.total),
+    porCentroCosto: centrosArray,
+    porTipo: tiposArray,
   }
 }
 
