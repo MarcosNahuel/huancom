@@ -65,17 +65,17 @@ export default async function ProveedoresPage() {
         <KPICard
           title="Total Proveedores"
           value={formatNumber(data.totalProveedores)}
-          icon="users"
+          iconName="Package"
         />
         <KPICard
           title="Total Compras"
           value={formatCurrency(data.totalCompras)}
-          icon="dollar"
+          iconName="DollarSign"
         />
         <KPICard
           title="Promedio por Compra"
           value={formatCurrency(data.promedioCompra)}
-          icon="trending"
+          iconName="TrendingUp"
         />
       </div>
 
