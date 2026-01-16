@@ -62,17 +62,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 px-4">
       <div className="w-full max-w-md">
         {/* Logo y Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg shadow-orange-500/30 mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-lg shadow-amber-500/30 mb-6">
             <span className="text-2xl font-bold text-white">H</span>
           </div>
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-white">
             {isRegister ? 'Crear cuenta' : 'Bienvenido'}
           </h1>
-          <p className="text-slate-500 mt-2">
+          <p className="text-slate-400 mt-2">
             {isRegister
               ? 'Completá tus datos para registrarte'
               : 'Ingresá a tu cuenta de HUANGCOM'}
@@ -80,10 +80,10 @@ export default function LoginPage() {
         </div>
 
         {/* Card del formulario */}
-        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/50 p-8">
+        <div className="bg-zinc-800/80 backdrop-blur-sm rounded-2xl shadow-xl shadow-black/20 border border-zinc-700/50 p-8">
           <form onSubmit={handleAuth} className="space-y-5">
             {error && (
-              <div className="flex items-center gap-3 bg-red-50 text-red-700 px-4 py-3 rounded-xl text-sm border border-red-100">
+              <div className="flex items-center gap-3 bg-red-500/10 text-red-400 px-4 py-3 rounded-xl text-sm border border-red-500/20">
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -92,7 +92,7 @@ export default function LoginPage() {
             )}
 
             {message && (
-              <div className="flex items-center gap-3 bg-green-50 text-green-700 px-4 py-3 rounded-xl text-sm border border-green-100">
+              <div className="flex items-center gap-3 bg-green-500/10 text-green-400 px-4 py-3 rounded-xl text-sm border border-green-500/20">
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -101,7 +101,7 @@ export default function LoginPage() {
             )}
 
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300">
                 Email
               </label>
               <input
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
+                className="w-full px-4 py-3 bg-zinc-700/50 border border-zinc-600 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                 placeholder="tu@email.com"
                 autoComplete="email"
                 required
@@ -117,7 +117,7 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300">
                 Contraseña
               </label>
               <input
@@ -125,7 +125,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
+                className="w-full px-4 py-3 bg-zinc-700/50 border border-zinc-600 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                 placeholder="••••••••"
                 autoComplete={isRegister ? 'new-password' : 'current-password'}
                 minLength={6}
@@ -138,7 +138,7 @@ export default function LoginPage() {
 
             {isRegister && (
               <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-300">
                   Confirmar contraseña
                 </label>
                 <input
@@ -146,12 +146,12 @@ export default function LoginPage() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`w-full px-4 py-3 bg-slate-50 border rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all ${
+                  className={`w-full px-4 py-3 bg-zinc-700/50 border rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all ${
                     confirmPassword && password !== confirmPassword
-                      ? 'border-red-300 bg-red-50'
+                      ? 'border-red-500/50 bg-red-500/10'
                       : confirmPassword && password === confirmPassword
-                      ? 'border-green-300 bg-green-50'
-                      : 'border-slate-200'
+                      ? 'border-green-500/50 bg-green-500/10'
+                      : 'border-zinc-600'
                   }`}
                   placeholder="••••••••"
                   autoComplete="new-password"
@@ -180,7 +180,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading || (isRegister && password !== confirmPassword)}
-              className="w-full py-3 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-medium rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -194,7 +194,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-slate-100 text-center">
+          <div className="mt-6 pt-6 border-t border-zinc-700 text-center">
             <button
               type="button"
               onClick={() => {
@@ -203,19 +203,19 @@ export default function LoginPage() {
                 setMessage('')
                 setConfirmPassword('')
               }}
-              className="text-sm text-slate-600 hover:text-orange-600 transition-colors"
+              className="text-sm text-slate-400 hover:text-amber-500 transition-colors"
             >
               {isRegister ? (
-                <>¿Ya tenés cuenta? <span className="font-medium text-orange-600">Ingresar</span></>
+                <>¿Ya tenés cuenta? <span className="font-medium text-amber-500">Ingresar</span></>
               ) : (
-                <>¿No tenés cuenta? <span className="font-medium text-orange-600">Registrate</span></>
+                <>¿No tenés cuenta? <span className="font-medium text-amber-500">Registrate</span></>
               )}
             </button>
           </div>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-slate-400 mt-8">
+        <p className="text-center text-sm text-slate-500 mt-8">
           HUANGCOM Dashboard © 2024
         </p>
       </div>
