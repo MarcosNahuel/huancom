@@ -9,10 +9,8 @@ export function Card({ className, ...props }: CardProps) {
         'rounded-xl border shadow-sm',
         // Light mode
         'border-slate-200 bg-white',
-        // Dark mode - glassmorphism effect
-        'dark:border-white/[0.06] dark:bg-gradient-to-br dark:from-slate-800/70 dark:to-slate-900/90',
-        'dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.03)]',
-        'dark:backdrop-blur-sm',
+        // Dark mode - fondo oscuro sólido
+        'dark:border-zinc-800 dark:bg-zinc-900',
         className
       )}
       {...props}

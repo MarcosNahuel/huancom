@@ -90,50 +90,50 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   DARK MODE TOKENS - Solar Luxury Edition
-   Deep, rich backgrounds with ambient solar glow and premium depth
+   DARK MODE TOKENS - High Contrast Dark
+   Fondo oscuro puro con texto blanco brillante
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .dark {
-  /* Core Solar Palette - Luminoso y vibrante en dark */
+  /* Core Solar Palette - Brillante en dark */
   --solar-50: #1a1207;
   --solar-100: #2a1c0a;
   --solar-200: #3d280f;
   --solar-300: #6b4516;
-  --solar-400: #c2640c;
-  --solar-500: #ea8c14;
-  --solar-600: #f9a825;
-  --solar-700: #ffc107;
-  --solar-800: #ffd54f;
-  --solar-900: #ffecb3;
+  --solar-400: #f59e0b;
+  --solar-500: #fbbf24;
+  --solar-600: #fcd34d;
+  --solar-700: #fde68a;
+  --solar-800: #fef3c7;
+  --solar-900: #fffbeb;
 
-  /* Industrial Slate - Tonos más cálidos y profundos */
-  --slate-50: #0c1220;
-  --slate-100: #141d2e;
-  --slate-200: #1e2d42;
-  --slate-300: #2d4156;
-  --slate-400: #4a6580;
-  --slate-500: #7d95ad;
-  --slate-600: #a8bdd1;
-  --slate-700: #d1dde9;
-  --slate-800: #e8eff5;
-  --slate-900: #f4f7fa;
+  /* Slate - Alto contraste */
+  --slate-50: #09090b;
+  --slate-100: #18181b;
+  --slate-200: #27272a;
+  --slate-300: #3f3f46;
+  --slate-400: #71717a;
+  --slate-500: #a1a1aa;
+  --slate-600: #d4d4d8;
+  --slate-700: #e4e4e7;
+  --slate-800: #f4f4f5;
+  --slate-900: #fafafa;
   --slate-950: #ffffff;
 
-  /* Semantic Colors - Dark Luxury */
-  --background: #08090d;
-  --background-secondary: #0d1117;
-  --background-tertiary: #121820;
-  --foreground: #f0f4f8;
-  --foreground-muted: #c9d6e3;
-  --muted: #7d95ad;
-  --muted-foreground: #4a6580;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.12);
-  --card: linear-gradient(145deg, #0f1419 0%, #0a0e13 100%);
-  --card-solid: #0f1419;
-  --card-hover: #141a21;
-  --card-elevated: linear-gradient(145deg, #151c24 0%, #0f141a 100%);
+  /* Semantic Colors - Alto Contraste */
+  --background: #09090b;
+  --background-secondary: #18181b;
+  --background-tertiary: #27272a;
+  --foreground: #fafafa;
+  --foreground-muted: #e4e4e7;
+  --muted: #a1a1aa;
+  --muted-foreground: #71717a;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --card: #18181b;
+  --card-solid: #18181b;
+  --card-hover: #27272a;
+  --card-elevated: #27272a;
 
   /* Glassmorphism tokens */
   --glass-bg: rgba(15, 20, 25, 0.85);
@@ -771,20 +771,14 @@ code, pre {
    Premium visual effects for dark theme
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Dark mode body with gradient atmosphere */
+/* Dark mode body - fondo oscuro puro */
 .dark body {
-  background:
-    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(249, 168, 37, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse 80% 60% at 80% 100%, rgba(56, 189, 248, 0.03) 0%, transparent 40%),
-    linear-gradient(180deg, #08090d 0%, #0a0c12 50%, #0d1017 100%);
-  background-attachment: fixed;
+  background: #09090b;
 }
 
 /* Dark mode main content area */
 .dark main {
-  background:
-    radial-gradient(ellipse 100% 70% at 70% 0%, rgba(249, 168, 37, 0.02) 0%, transparent 50%),
-    linear-gradient(180deg, #0a0c10 0%, #080a0e 100%);
+  background: #09090b;
 }
 
 /* Dark scrollbar - more refined */

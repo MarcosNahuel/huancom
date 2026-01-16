@@ -8,12 +8,12 @@ import { TrendingUp, TrendingDown, DollarSign, Calculator } from 'lucide-react'
 async function getContabilidadData() {
   const supabase = await createClient()
 
-  // Resultado mensual
-  const { data: resultados } = await supabase
-    .from('v_resultado_mensual')
-    .select('*')
-    .order('anio_mes', { ascending: false })
-    .limit(12)
+  // Obtener ventas agrupadas por mes (desde pedidos)
+  const { data: pedidos } = await supabase
+    .from('pedidos')
+    .select('fecha_venta, total')
+    .not('fecha_venta', 'is', null)
+    .order('fecha_venta', { ascending: false })
 
   // Costos fijos activos
   const { data: costosFijos } = await supabase
@@ -23,11 +23,33 @@ async function getContabilidadData() {
 
   const totalCostosFijos = costosFijos?.reduce((acc, c) => acc + (c.costo_mensual_ars || 0), 0) || 0
 
-  // Último mes
-  const ultimoMes = resultados?.[0] || { ingresos: 0, egresos: 0, resultado: 0 }
+  // Agrupar pedidos por mes para calcular ingresos
+  const ingresosPorMes: Record<string, number> = {}
+  pedidos?.forEach((p) => {
+    if (p.fecha_venta && p.total) {
+      const fecha = new Date(p.fecha_venta)
+      const anioMes = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}`
+      ingresosPorMes[anioMes] = (ingresosPorMes[anioMes] || 0) + Number(p.total)
+    }
+  })
+
+  // Crear resultados mensuales combinando ingresos (pedidos) con egresos (costos fijos)
+  const resultados = Object.entries(ingresosPorMes)
+    .map(([anioMes, ingresos]) => ({
+      anio_mes: anioMes,
+      centro_costo: 'Ventas MeLi',
+      ingresos,
+      egresos: totalCostosFijos,
+      resultado: ingresos - totalCostosFijos,
+    }))
+    .sort((a, b) => b.anio_mes.localeCompare(a.anio_mes))
+    .slice(0, 12)
+
+  // Último mes (más reciente)
+  const ultimoMes = resultados[0] || { ingresos: 0, egresos: totalCostosFijos, resultado: -totalCostosFijos }
 
   return {
-    resultados: resultados || [],
+    resultados,
     costosFijos: costosFijos || [],
     totalCostosFijos,
     ultimoMes,
@@ -54,12 +76,12 @@ export default async function ContabilidadPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-green-100 p-2">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
+                <div className="rounded-full bg-green-100 dark:bg-green-500/20 p-2">
+                  <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Ingresos (Último Mes)</p>
-                  <p className="text-xl font-bold text-green-600">
+                  <p className="text-sm text-gray-500 dark:text-slate-300">Ingresos (Último Mes)</p>
+                  <p className="text-xl font-bold text-green-600 dark:text-green-400">
                     {formatCurrency(data.ultimoMes.ingresos)}
                   </p>
                 </div>
@@ -69,12 +91,12 @@ export default async function ContabilidadPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-red-100 p-2">
-                  <TrendingDown className="h-5 w-5 text-red-600" />
+                <div className="rounded-full bg-red-100 dark:bg-red-500/20 p-2">
+                  <TrendingDown className="h-5 w-5 text-red-600 dark:text-red-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Egresos (Último Mes)</p>
-                  <p className="text-xl font-bold text-red-600">
+                  <p className="text-sm text-gray-500 dark:text-slate-300">Egresos (Último Mes)</p>
+                  <p className="text-xl font-bold text-red-600 dark:text-red-400">
                     {formatCurrency(data.ultimoMes.egresos)}
                   </p>
                 </div>
@@ -84,12 +106,12 @@ export default async function ContabilidadPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className={`rounded-full p-2 ${data.ultimoMes.resultado >= 0 ? 'bg-green-100' : 'bg-red-100'}`}>
-                  <DollarSign className={`h-5 w-5 ${data.ultimoMes.resultado >= 0 ? 'text-green-600' : 'text-red-600'}`} />
+                <div className={`rounded-full p-2 ${data.ultimoMes.resultado >= 0 ? 'bg-green-100 dark:bg-green-500/20' : 'bg-red-100 dark:bg-red-500/20'}`}>
+                  <DollarSign className={`h-5 w-5 ${data.ultimoMes.resultado >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`} />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Resultado (Último Mes)</p>
-                  <p className={`text-xl font-bold ${data.ultimoMes.resultado >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className="text-sm text-gray-500 dark:text-slate-300">Resultado (Último Mes)</p>
+                  <p className={`text-xl font-bold ${data.ultimoMes.resultado >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                     {formatCurrency(data.ultimoMes.resultado)}
                   </p>
                 </div>
@@ -99,12 +121,12 @@ export default async function ContabilidadPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-purple-100 p-2">
-                  <Calculator className="h-5 w-5 text-purple-600" />
+                <div className="rounded-full bg-purple-100 dark:bg-purple-500/20 p-2">
+                  <Calculator className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Costos Fijos</p>
-                  <p className="text-xl font-bold">{formatCurrency(data.totalCostosFijos)}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-300">Costos Fijos</p>
+                  <p className="text-xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(data.totalCostosFijos)}</p>
                 </div>
               </div>
             </CardContent>
@@ -115,39 +137,39 @@ export default async function ContabilidadPage() {
           {/* Resultado Mensual */}
           <Card>
             <CardHeader>
-              <CardTitle>Resultado por Mes</CardTitle>
+              <CardTitle className="text-slate-900 dark:text-slate-100">Resultado por Mes</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-left">
-                      <th className="pb-3 font-medium text-gray-500">Período</th>
-                      <th className="pb-3 font-medium text-gray-500 text-right">Ingresos</th>
-                      <th className="pb-3 font-medium text-gray-500 text-right">Egresos</th>
-                      <th className="pb-3 font-medium text-gray-500 text-right">Resultado</th>
+                    <tr className="border-b border-gray-200 dark:border-zinc-700 text-left">
+                      <th className="pb-3 font-medium text-gray-500 dark:text-slate-300">Período</th>
+                      <th className="pb-3 font-medium text-gray-500 dark:text-slate-300 text-right">Ingresos</th>
+                      <th className="pb-3 font-medium text-gray-500 dark:text-slate-300 text-right">Egresos</th>
+                      <th className="pb-3 font-medium text-gray-500 dark:text-slate-300 text-right">Resultado</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.resultados.length > 0 ? (
                       data.resultados.map((row: any) => (
-                        <tr key={`${row.anio_mes}-${row.centro_costo}`} className="border-b border-gray-100">
+                        <tr key={`${row.anio_mes}-${row.centro_costo}`} className="border-b border-gray-100 dark:border-zinc-800">
                           <td className="py-3">
                             <div>
-                              <p className="font-medium">{row.anio_mes}</p>
-                              <p className="text-xs text-gray-500">{row.centro_costo}</p>
+                              <p className="font-medium text-slate-900 dark:text-slate-100">{row.anio_mes}</p>
+                              <p className="text-xs text-gray-500 dark:text-slate-400">{row.centro_costo}</p>
                             </div>
                           </td>
-                          <td className="py-3 text-right text-green-600">{formatCurrency(row.ingresos)}</td>
-                          <td className="py-3 text-right text-red-600">{formatCurrency(row.egresos)}</td>
-                          <td className={`py-3 text-right font-bold ${row.resultado >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <td className="py-3 text-right text-green-600 dark:text-green-400">{formatCurrency(row.ingresos)}</td>
+                          <td className="py-3 text-right text-red-600 dark:text-red-400">{formatCurrency(row.egresos)}</td>
+                          <td className={`py-3 text-right font-bold ${row.resultado >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                             {formatCurrency(row.resultado)}
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={4} className="py-8 text-center text-gray-500">
+                        <td colSpan={4} className="py-8 text-center text-gray-500 dark:text-slate-400">
                           No hay datos contables
                         </td>
                       </tr>
@@ -161,7 +183,7 @@ export default async function ContabilidadPage() {
           {/* Costos Fijos */}
           <Card>
             <CardHeader>
-              <CardTitle>Costos Fijos Mensuales</CardTitle>
+              <CardTitle className="text-slate-900 dark:text-slate-100">Costos Fijos Mensuales</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -169,21 +191,21 @@ export default async function ContabilidadPage() {
                   data.costosFijos.map((costo: any) => (
                     <div
                       key={costo.id}
-                      className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
+                      className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-zinc-800 p-3"
                     >
                       <div>
-                        <p className="font-medium">{costo.descripcion}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="font-medium text-slate-900 dark:text-slate-100">{costo.descripcion}</p>
+                        <p className="text-xs text-gray-500 dark:text-slate-400">
                           {costo.tipo} • {costo.centro_costo}
                         </p>
                       </div>
-                      <p className="font-bold text-gray-900">
+                      <p className="font-bold text-gray-900 dark:text-slate-100">
                         {formatCurrency(costo.costo_mensual_ars)}
                       </p>
                     </div>
                   ))
                 ) : (
-                  <p className="text-center text-gray-500 py-8">
+                  <p className="text-center text-gray-500 dark:text-slate-400 py-8">
                     No hay costos fijos registrados
                   </p>
                 )}

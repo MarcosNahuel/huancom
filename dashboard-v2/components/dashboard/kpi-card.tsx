@@ -12,6 +12,7 @@ import {
   Zap,
   Sun,
   Battery,
+  Receipt,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -26,6 +27,7 @@ const iconMap: Record<string, LucideIcon> = {
   Zap,
   Sun,
   Battery,
+  Receipt,
 }
 
 // Variantes de color para los iconos - Solar Luxury Dark
@@ -112,7 +114,7 @@ export function KPICard({
       <div className="relative flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0 space-y-3">
           {/* Título */}
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 tracking-tight">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-300 tracking-tight">
             {title}
           </p>
 
@@ -124,7 +126,7 @@ export function KPICard({
           {/* Descripción y trend */}
           <div className="flex flex-wrap items-center gap-2">
             {description && (
-              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
+              <p className="text-xs text-slate-400 dark:text-slate-400 font-medium">
                 {description}
               </p>
             )}
