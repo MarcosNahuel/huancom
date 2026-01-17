@@ -7,8 +7,13 @@ import { TrendingUp, AlertTriangle, Flame, Sparkles, BarChart3, PieChart, Target
 import { SalesTrendChart } from '@/components/dashboard/charts/sales-trend-chart'
 import { ParetoChart } from '@/components/dashboard/charts/pareto-chart'
 import { CategoryChart } from '@/components/dashboard/charts/category-chart'
+import { subDays } from 'date-fns'
 
-async function getMetrics() {
+interface PageProps {
+  searchParams: Promise<{ from?: string; to?: string }>
+}
+
+async function getMetrics(fromDate: Date, toDate: Date) {
   const supabase = await createClient()
 
   // Obtener métricas de productos
@@ -23,29 +28,24 @@ async function getMetrics() {
     .not('fecha_venta', 'is', null)
     .order('fecha_venta', { ascending: false })
 
-  // Obtener pedidos del mes actual
-  const startOfMonth = new Date()
-  startOfMonth.setDate(1)
-  startOfMonth.setHours(0, 0, 0, 0)
-
-  const pedidosMes = todosPedidos?.filter(p =>
-    new Date(p.fecha_venta) >= startOfMonth
-  ) || []
-
-  const countPedidosMes = pedidosMes.length
-
-  // Obtener pedidos del mes anterior para comparativa
-  const startOfLastMonth = new Date()
-  startOfLastMonth.setMonth(startOfLastMonth.getMonth() - 1)
-  startOfLastMonth.setDate(1)
-  startOfLastMonth.setHours(0, 0, 0, 0)
-
-  const endOfLastMonth = new Date(startOfMonth)
-  endOfLastMonth.setDate(0)
-
-  const pedidosMesAnterior = todosPedidos?.filter(p => {
+  // Filtrar pedidos del período seleccionado
+  const pedidosPeriodo = todosPedidos?.filter(p => {
     const fecha = new Date(p.fecha_venta)
-    return fecha >= startOfLastMonth && fecha <= endOfLastMonth
+    return fecha >= fromDate && fecha <= toDate
+  }) || []
+
+  const countPedidosPeriodo = pedidosPeriodo.length
+
+  // Calcular período anterior (mismo número de días hacia atrás)
+  const diasPeriodo = Math.ceil((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24))
+  const fromDateAnterior = new Date(fromDate)
+  fromDateAnterior.setDate(fromDateAnterior.getDate() - diasPeriodo - 1)
+  const toDateAnterior = new Date(fromDate)
+  toDateAnterior.setDate(toDateAnterior.getDate() - 1)
+
+  const pedidosPeriodoAnterior = todosPedidos?.filter(p => {
+    const fecha = new Date(p.fecha_venta)
+    return fecha >= fromDateAnterior && fecha <= toDateAnterior
   }) || []
 
   // Obtener costos fijos activos para calcular egresos mensuales
@@ -69,23 +69,23 @@ async function getMetrics() {
   // Calcular totales
   const valorInventario = productos?.reduce((acc, p) => acc + (p.valor_inventario || 0), 0) || 0
   const totalStock = productos?.reduce((acc, p) => acc + (p.stock || 0), 0) || 0
-  const ventasMes = pedidosMes?.reduce((acc, p) => acc + (Number(p.total) || 0), 0) || 0
-  const unidadesMes = pedidosMes?.reduce((acc, p) => acc + (Number(p.unidades) || 0), 0) || 0
+  const ventasPeriodo = pedidosPeriodo?.reduce((acc, p) => acc + (Number(p.total) || 0), 0) || 0
+  const unidadesPeriodo = pedidosPeriodo?.reduce((acc, p) => acc + (Number(p.unidades) || 0), 0) || 0
   const egresosMes = costosFijos?.reduce((acc, c) => acc + (c.costo_mensual_ars || 0), 0) || 0
 
-  // Métricas mes anterior
-  const ventasMesAnterior = pedidosMesAnterior?.reduce((acc, p) => acc + (Number(p.total) || 0), 0) || 0
+  // Métricas período anterior
+  const ventasPeriodoAnterior = pedidosPeriodoAnterior?.reduce((acc, p) => acc + (Number(p.total) || 0), 0) || 0
 
   // Calcular variación porcentual
-  const variacionVentas = ventasMesAnterior > 0
-    ? ((ventasMes - ventasMesAnterior) / ventasMesAnterior) * 100
+  const variacionVentas = ventasPeriodoAnterior > 0
+    ? ((ventasPeriodo - ventasPeriodoAnterior) / ventasPeriodoAnterior) * 100
     : 0
 
   // Ticket promedio = ventas / pedidos
-  const ticketPromedio = countPedidosMes && countPedidosMes > 0 ? ventasMes / countPedidosMes : 0
+  const ticketPromedio = countPedidosPeriodo && countPedidosPeriodo > 0 ? ventasPeriodo / countPedidosPeriodo : 0
 
-  // Resultado = Ingresos (ventas) - Egresos (costos fijos)
-  const resultadoMes = ventasMes - egresosMes
+  // Resultado = Ingresos (ventas) - Egresos (costos fijos proporcionales)
+  const resultadoPeriodo = ventasPeriodo - egresosMes
 
   // === DATOS PARA GRÁFICOS ===
 
@@ -196,12 +196,12 @@ async function getMetrics() {
     totalStock,
     productosConStock: productos?.filter(p => p.stock > 0).length || 0,
     productosSinStock: productos?.filter(p => (p.stock || 0) <= 0).length || 0,
-    pedidosMes: countPedidosMes || 0,
-    unidadesMes,
-    ventasMes,
+    pedidosPeriodo: countPedidosPeriodo || 0,
+    unidadesPeriodo,
+    ventasPeriodo,
     ticketPromedio,
     egresosMes,
-    resultadoMes,
+    resultadoPeriodo,
     variacionVentas,
     alertasStock: alertasStock || [],
     topProductos: topProductos || [],
@@ -214,8 +214,14 @@ async function getMetrics() {
   }
 }
 
-export default async function DashboardPage() {
-  const metrics = await getMetrics()
+export default async function DashboardPage({ searchParams }: PageProps) {
+  const params = await searchParams
+
+  // Parsear fechas de los parámetros o usar últimos 30 días por defecto
+  const toDate = params.to ? new Date(params.to + 'T23:59:59') : new Date()
+  const fromDate = params.from ? new Date(params.from + 'T00:00:00') : subDays(new Date(), 30)
+
+  const metrics = await getMetrics(fromDate, toDate)
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50/50 dark:bg-zinc-950">
@@ -240,9 +246,9 @@ export default async function DashboardPage() {
             animationDelay={0}
           />
           <KPICard
-            title="Ventas del Mes"
-            value={formatCurrency(metrics.ventasMes)}
-            description={`${metrics.pedidosMes} pedidos`}
+            title="Ventas del Período"
+            value={formatCurrency(metrics.ventasPeriodo)}
+            description={`${metrics.pedidosPeriodo} pedidos`}
             iconName="ShoppingCart"
             iconVariant="success"
             trend={metrics.variacionVentas !== 0 ? {
@@ -254,17 +260,17 @@ export default async function DashboardPage() {
           <KPICard
             title="Ticket Promedio"
             value={formatCurrency(metrics.ticketPromedio)}
-            description={`${formatNumber(metrics.unidadesMes)} unidades vendidas`}
+            description={`${formatNumber(metrics.unidadesPeriodo)} unidades vendidas`}
             iconName="Receipt"
             iconVariant="energy"
             animationDelay={100}
           />
           <KPICard
-            title="Resultado del Mes"
-            value={formatCurrency(metrics.resultadoMes)}
+            title="Resultado del Período"
+            value={formatCurrency(metrics.resultadoPeriodo)}
             description={`Costos fijos: ${formatCurrency(metrics.egresosMes)}`}
             iconName="DollarSign"
-            iconVariant={metrics.resultadoMes >= 0 ? 'success' : 'danger'}
+            iconVariant={metrics.resultadoPeriodo >= 0 ? 'success' : 'danger'}
             animationDelay={150}
           />
         </div>

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Calendar } from 'lucide-react'
 import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns'
@@ -20,12 +21,45 @@ const presets = [
 ]
 
 export function DateRangePicker({ onChange }: DateRangePickerProps) {
-  const [selectedPreset, setSelectedPreset] = useState('Últimos 30 días')
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [isOpen, setIsOpen] = useState(false)
+
+  // Detectar preset inicial desde URL params
+  const getInitialPreset = () => {
+    const fromParam = searchParams.get('from')
+    const toParam = searchParams.get('to')
+
+    if (fromParam && toParam) {
+      // Intentar encontrar preset que coincida
+      const fromDate = new Date(fromParam)
+      const toDate = new Date(toParam)
+
+      for (const preset of presets) {
+        const range = preset.getValue()
+        if (
+          format(range.from, 'yyyy-MM-dd') === format(fromDate, 'yyyy-MM-dd') &&
+          format(range.to, 'yyyy-MM-dd') === format(toDate, 'yyyy-MM-dd')
+        ) {
+          return preset.label
+        }
+      }
+    }
+    return 'Últimos 30 días'
+  }
+
+  const [selectedPreset, setSelectedPreset] = useState(getInitialPreset)
 
   const handlePresetClick = (preset: typeof presets[0]) => {
     setSelectedPreset(preset.label)
     const range = preset.getValue()
+
+    // Actualizar URL params
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('from', format(range.from, 'yyyy-MM-dd'))
+    params.set('to', format(range.to, 'yyyy-MM-dd'))
+    router.push(`?${params.toString()}`)
+
     onChange?.(range)
     setIsOpen(false)
   }
