@@ -1,0 +1,132 @@
+{
+  "name": "Vectorizar Documentos Knowledge Base → Pinecone v2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-200, 300],
+      "id": "trigger-manual",
+      "name": "Ejecutar"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://raw.githubusercontent.com/MarcosNahuel/huancom/main/clara/knowledge/chunks/chunks_ready.json",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [100, 300],
+      "id": "http-chunks",
+      "name": "Descargar Chunks GitHub"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraer array de chunks del JSON descargado\nconst data = $json;\nconst chunks = Array.isArray(data) ? data : (data.chunks || []);\n\nconsole.log(`Total chunks: ${chunks.length}`);\n\nreturn chunks.map(c => ({ json: c }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300],
+      "id": "parse-chunks",
+      "name": "Parsear Chunks"
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [700, 300],
+      "id": "split-batches",
+      "name": "Lotes de 5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/embeddings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'text-embedding-3-small', input: $json.text, dimensions: 512 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 300],
+      "id": "openai-embed",
+      "name": "OpenAI Embedding"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Combinar el chunk original con su embedding\nconst chunkData = $('Lotes de 5').item.json;\nconst embedding = $json.data[0].embedding;\n\nreturn [{\n  json: {\n    vectors: [{\n      id: chunkData.id,\n      values: embedding,\n      metadata: {\n        ...chunkData.metadata,\n        text: chunkData.text\n      }\n    }]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, 300],
+      "id": "prepare-upsert",
+      "name": "Preparar Upsert"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://huancom-XXXXX.svc.REGION.pinecone.io/vectors/upsert",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "pineconeApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ vectors: $json.vectors, namespace: 'documentos' }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1600, 300],
+      "id": "pinecone-upsert",
+      "name": "Pinecone Upsert"
+    },
+    {
+      "parameters": {
+        "content": "## Workflow: Vectorizar Knowledge Base a Pinecone v2\n\n**Index:** huancom\n**Namespace:** documentos\n**Embeddings:** text-embedding-3-small (512d)\n**Chunks:** 506 (desde GitHub raw)\n\n### CONFIGURAR:\n\n1. **Pinecone Upsert** → Cambiar URL:\n   - Ir a Pinecone Dashboard → Index 'huancom'\n   - Copiar Host URL\n   - Reemplazar: https://huancom-XXXXX.svc.REGION.pinecone.io\n\n2. **Credenciales:**\n   - OpenAI API (nodo OpenAI Embedding)\n   - Pinecone API (nodo Pinecone Upsert)\n\n### EJECUTAR:\nClick en 'Execute Workflow'",
+        "height": 380,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-200, -150],
+      "id": "note-instrucciones",
+      "name": "INSTRUCCIONES"
+    }
+  ],
+  "connections": {
+    "Ejecutar": {
+      "main": [[{"node": "Descargar Chunks GitHub", "type": "main", "index": 0}]]
+    },
+    "Descargar Chunks GitHub": {
+      "main": [[{"node": "Parsear Chunks", "type": "main", "index": 0}]]
+    },
+    "Parsear Chunks": {
+      "main": [[{"node": "Lotes de 5", "type": "main", "index": 0}]]
+    },
+    "Lotes de 5": {
+      "main": [null, [{"node": "OpenAI Embedding", "type": "main", "index": 0}]]
+    },
+    "OpenAI Embedding": {
+      "main": [[{"node": "Preparar Upsert", "type": "main", "index": 0}]]
+    },
+    "Preparar Upsert": {
+      "main": [[{"node": "Pinecone Upsert", "type": "main", "index": 0}]]
+    },
+    "Pinecone Upsert": {
+      "main": [[{"node": "Lotes de 5", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
